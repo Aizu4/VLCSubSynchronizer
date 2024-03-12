@@ -7,7 +7,7 @@ from tkinter import filedialog, messagebox
 
 from synchronize import offset_in_ms
 
-TITLE = "VLC Subtitles Syncronizer"
+TITLE = "VLC Subtitle Syncronizer"
 
 ALLOWED_VIDEO_EXTENSIONS = [
     ("Video Files", "*.mp4;*.mkv;*.avi;*.flv;*.mov;*.wmv;*.webm;*.mpg;*.mpeg;*.m4v;*.3gp;*.3g2")
