@@ -59,7 +59,9 @@ def normalize(data):
 
 
 def rms(data):
-    return np.sqrt(np.mean(np.square(data)))
+    square = np.square(data)
+    mean = np.mean(square)
+    return np.sqrt(mean)
 
 
 def loss(arr1, arr2) -> float:
