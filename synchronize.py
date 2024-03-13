@@ -49,7 +49,7 @@ def offset_subtitles_chunks(chunks, offset: int):
 
 
 def total_ms(t) -> int:
-    return int(t.hour * 3_600_000 + t.minute * 60_000 + t.second * 1000 + t.microsecond / 1000)
+    return t.hour * 3_600_000 + t.minute * 60_000 + t.second * 1000 + t.microsecond // 1000
 
 
 def normalize(data):
