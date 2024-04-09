@@ -1,4 +1,3 @@
-import math
 import more_itertools
 import numpy as np
 
@@ -84,15 +83,16 @@ def offset_in_ms(video_file: str, subtitle_file: str) -> int:
     audio_chunks = normalized_rms_chunks(audio_wave_data, SAMPLING_FPS * PRECISSION_MS // 1000)
 
     margin = MARGIN_MS // PRECISSION_MS
-    min_offset, min_loss = 0, math.inf
-    for offset in range(-margin, margin + 1):
-        subtitles_chunks = offset_subtitles_chunks(base_subtitles_chunks, offset)
 
-        audio_chunks, subtitles_chunks = equalize_lengths(audio_chunks, subtitles_chunks)
-
-        current_loss = loss(audio_chunks, subtitles_chunks)
-        if current_loss < min_loss:
-            min_loss, min_offset = current_loss, offset
+    min_offset, _ = min(
+        [evaluate(base_subtitles_chunks, audio_chunks, offset) for offset in range(-margin, margin + 1)],
+        key=lambda x: x[1]
+    )
 
     return min_offset * PRECISSION_MS
 
+
+def evaluate(base_subtitles_chunks, audio_chunks, offset):
+    subtitles_chunks = offset_subtitles_chunks(base_subtitles_chunks, offset)
+    audio_chunks, subtitles_chunks = equalize_lengths(audio_chunks, subtitles_chunks)
+    return offset, loss(audio_chunks, subtitles_chunks)
