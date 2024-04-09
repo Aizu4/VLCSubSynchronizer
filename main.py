@@ -37,6 +37,16 @@ def launch_vlc(video_file, subtitles_file, vlc_path=VLC_PATH):
         messagebox.showerror("Error", f"An error occurred: {e}")
 
 
+def show_offset(video_file, subtitles_file):
+    try:
+        video_file_path = video_file.get()
+        subtitles_file_path = subtitles_file.get()
+        offset = offset_in_ms(video_file_path, subtitles_file_path)
+        messagebox.showinfo("Done!", f"offset: {offset}")
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred: {e}")
+
+
 def init_gui() -> tk.Tk:
     root = tk.Tk()
     root.title(TITLE)
@@ -46,10 +56,16 @@ def init_gui() -> tk.Tk:
     subtitles_file = add_file_input(root, "Subtitles File:", 1, ALLOWED_SUBTITLES_EXTENSIONS)
 
     button_open_vlc = tk.Button(
-        root, text="Calculate the delay and open in VLC",
+        root, text="Calculate the delay",
+        command=lambda: show_offset(video_file, subtitles_file)
+    )
+    button_open_vlc.grid(row=2, column=1, columnspan=1, pady=5)
+
+    button_open_vlc = tk.Button(
+        root, text="Open in VLC",
         command=lambda: launch_vlc(video_file, subtitles_file)
     )
-    button_open_vlc.grid(row=2, column=0, columnspan=3, pady=5)
+    button_open_vlc.grid(row=2, column=2, columnspan=1, pady=5)
 
     return root
 
@@ -58,12 +74,12 @@ def add_file_input(root: tk.Tk, label: str, row: int, filetypes: list):
     label = tk.Label(root, text=label)
     label.grid(row=row, column=0, padx=10, pady=5)
     file = tk.Entry(root, width=100)
-    file.grid(row=row, column=1, padx=10, pady=5)
+    file.grid(row=row, column=1, columnspan=2, padx=10, pady=5)
     button_browse_video_file = tk.Button(
         root, text="Browse",
         command=lambda: browse_file(file, filetypes=filetypes)
     )
-    button_browse_video_file.grid(row=row, column=2, padx=5, pady=5)
+    button_browse_video_file.grid(row=row, column=3, padx=5, pady=5)
     return file
 
 
